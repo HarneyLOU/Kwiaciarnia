@@ -631,6 +631,7 @@ void Menu::MenuLogowania(MYSQL &mysql)
 		cout << "[" << Check(1) << "]. Zarejestruj sie" << endl;
 		cout << "[" << Check(2) << "]. Wyjscie" << endl << endl << endl;
 		system("DATE /T");
+		cout <<endl<< "Version 0.22"<< endl;
 
 		c = _getch();
 		switch (c)
