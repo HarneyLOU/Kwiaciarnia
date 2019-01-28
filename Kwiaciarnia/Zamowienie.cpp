@@ -17,7 +17,7 @@ void Zamowienie::Wyswietl(MYSQL &mysql, string query)
 	MYSQL_ROW  wiersz;
 
 	if (query == "0") query = "SELECT z.IDZ, k.Nazwisko, o.IDK, o.Nazwa, z.Sztuk, z.Kwota, z.Data, z.Status FROM `zamowienie` z, `oferta` o, `klienci` k WHERE k.login = z. login and z.IDK= o.IDK ORDER BY z.Data DESC";
-
+	cout.width(10);
 	cout << "Nr zamowienia";
 	cout.width(20);
 	cout << "Nazwisko";
@@ -27,11 +27,11 @@ void Zamowienie::Wyswietl(MYSQL &mysql, string query)
 	cout << "Nazwa oferty";
 	cout.width(16);
 	cout << "Sztuk";
-	cout.width(9);
+	cout.width(10);
 	cout << "Kwota";
-	cout.width(16);
+	cout.width(14);
 	cout << "Data";
-	cout.width(16);
+	cout.width(18);
 	cout << "Status" << endl<<endl;
 	cout << "__________________________________________________________________________________________________________________" << endl;
 
@@ -87,17 +87,21 @@ void Zamowienie::Dodaj(MYSQL &mysql, string login)
 		idZapytania = mysql_store_result(&mysql);
 
 		wiersz = mysql_fetch_row(idZapytania);
-		double cena = stod(wiersz[0]);
+		if (wiersz != NULL)
+		{
+			double cena = stod(wiersz[0]);
 
-		//Cena ofery x liczba sztuk
+			//Cena ofery x liczba sztuk
 
-		cena = cena * (stoi(sztuk));
-		string cenas = to_string(cena);
+			cena = cena * (stoi(sztuk));
+			string cenas = to_string(cena);
 
-		query = "INSERT INTO `zamowienie`(`login`, `IDK`, `Sztuk`, `Kwota`, `Data`) VALUES ('" + login + "', " + idk + ", " + sztuk + ", " + cenas + ", SYSDATE())";
-		mysql_query(&mysql, query.c_str());
+			query = "INSERT INTO `zamowienie`(`login`, `IDK`, `Sztuk`, `Kwota`, `Data`) VALUES ('" + login + "', " + idk + ", " + sztuk + ", " + cenas + ", SYSDATE())";
+			mysql_query(&mysql, query.c_str());
 
-		if (login != "admin") cout << "Zamowienie zlozone. Zrealizujemy je po otrzymaniu wplaty." << endl;
+			if (login != "admin") cout << "Zamowienie zlozone. Zrealizujemy je po otrzymaniu wplaty." << endl;
+		}
+		else cout << "Nie ma takiej oferty w bazie!" << endl;
 	}
 	else
 	{
